@@ -127,7 +127,7 @@
       <div class="modal-body">
         <div class="form-group">
           <label class="form-label">لینک جدید:</label>
-          <input type="url" id="channelLinkInput" class="form-control" placeholder="https://t.me/...">
+          <input type="url" id="channelLinkInput" class="form-control" placeholder="https://...">
         </div>
       </div>
       <div class="modal-footer">
@@ -291,9 +291,13 @@
     async function openChannelModal() {
       showLoading(true);
       try {
-        const res = await fetch('/api/rtdb?path=settings/channelLink');
+        const res = await fetch('/api/set');
         const data = await res.json();
-        if (data) document.getElementById('channelLinkInput').value = data;
+        if (data && data.channelLink) {
+          document.getElementById('channelLinkInput').value = data.channelLink;
+        } else {
+          document.getElementById('channelLinkInput').value = '';
+        }
       } catch(e){}
       showLoading(false);
       openModal('channelModal');
@@ -302,9 +306,13 @@
     async function openDescModal() {
       showLoading(true);
       try {
-        const res = await fetch('/api/rtdb?path=settings/siteDescription');
+        const res = await fetch('/api/set');
         const data = await res.json();
-        if (data) document.getElementById('siteDescInput').value = data;
+        if (data && data.siteDescription) {
+          document.getElementById('siteDescInput').value = data.siteDescription;
+        } else {
+          document.getElementById('siteDescInput').value = '';
+        }
       } catch(e){}
       showLoading(false);
       openModal('descModal');
@@ -372,10 +380,10 @@
       const val = document.getElementById(inputId).value;
       showLoading(true);
       try {
-        await fetch(`/api/rtdb?path=settings/${key}`, {
-          method: 'PUT',
+        await fetch('/api/set', {
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(val)
+          body: JSON.stringify({ key: key, value: val })
         });
         closeModal(modalId);
         alert('با موفقیت ثبت شد');
