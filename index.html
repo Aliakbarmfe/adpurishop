@@ -4,242 +4,253 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>پنل مدیریت سایت</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
   <style>
     @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
-    body {
-      font-family: 'Vazirmatn', sans-serif;
-      background-color: #f8f9fa;
-    }
-    .header-btns {
-      background: #ffffff;
-      padding: 15px;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-      margin-bottom: 30px;
-    }
-    .main-btns .btn-category {
-      height: 100px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      border-radius: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-      transition: all 0.2s ease;
-    }
-    .main-btns .btn-category:hover {
-      transform: translateY(-3px);
-    }
-    .product-img-preview {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; }
+    body { background-color: #f4f6f9; color: #333; padding: 15px; }
+
     .loading-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(255,255,255,0.7);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255,255,255,0.8); display: none;
+      justify-content: center; align-items: center; z-index: 9999;
+      font-weight: bold; font-size: 1.2rem; color: #007bff;
     }
+
+    .container { max-width: 800px; margin: 0 auto; }
+
+    /* دکمه‌های بالا */
+    .header-btns {
+      display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .btn {
+      padding: 10px 18px; border: none; border-radius: 8px; cursor: pointer;
+      font-size: 0.95rem; font-weight: bold; transition: 0.2s;
+    }
+    .btn-primary { background: #007bff; color: white; }
+    .btn-secondary { background: #6c757d; color: white; }
+    .btn-success { background: #28a745; color: white; }
+    .btn-danger { background: #dc3545; color: white; }
+    .btn-warning { background: #ffc107; color: #212529; }
+    .btn-dark { background: #343a40; color: white; }
+    .btn-info { background: #17a2b8; color: white; }
+    .btn:active { transform: scale(0.97); }
+
+    /* دکمه‌های اصلی وسط */
+    .main-grid {
+      display: grid; grid-template-columns: 1fr; gap: 15px;
+    }
+    @media(min-width: 576px) {
+      .main-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .btn-category {
+      height: 90px; font-size: 1.1rem; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); width: 100%;
+    }
+
+    /* پاپ‌آپ‌ها (Modal) */
+    .modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); display: none;
+      justify-content: center; align-items: center; z-index: 1000; padding: 15px;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: white; width: 100%; max-width: 600px;
+      max-height: 90vh; border-radius: 12px; display: flex;
+      flex-direction: column; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    .modal-header {
+      padding: 15px 20px; background: #f8f9fa; border-bottom: 1px solid #dee2e6;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+    .modal-footer { padding: 15px 20px; background: #f8f9fa; border-top: 1px solid #dee2e6; display: flex; justify-content: flex-end; gap: 10px; }
+    
+    .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #aaa; }
+
+    /* فرم و لیست محصولات */
+    .form-group { margin-bottom: 15px; }
+    .form-label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9rem; }
+    .form-control { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 6px; font-size: 1rem; }
+    textarea.form-control { resize: vertical; }
+
+    .product-card {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px; border: 1px solid #e9ecef; border-radius: 8px; margin-bottom: 10px; background: #fff;
+    }
+    .product-info { display: flex; align-items: center; gap: 12px; }
+    .product-img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; }
+    .product-actions { display: flex; gap: 8px; }
+    .badge { background: #6c757d; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; }
   </style>
 </head>
 <body>
 
-  <div class="loading-overlay" id="loading">
-    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status"></div>
-  </div>
+  <div class="loading-overlay" id="loading">در حال پردازش...</div>
 
-  <div class="container py-4">
-    <!-- بخش دکمه‌های بالا -->
-    <div class="header-btns d-flex flex-wrap gap-2 justify-content: center justify-content-sm-start">
-      <button class="btn btn-outline-primary" onclick="openChannelModal()">
-        <i class="bi bi-telegram"></i> تنظیم لینک کانال
-      </button>
-      <button class="btn btn-outline-secondary" onclick="openDescModal()">
-        <i class="bi bi-file-text"></i> توضیحات سایت
-      </button>
+  <div class="container">
+    <!-- دکمه‌های بالا -->
+    <div class="header-btns">
+      <button class="btn btn-outline-primary" style="border: 1px solid #007bff; color: #007bff; background: white;" onclick="openChannelModal()">🔗 تنظیم لینک کانال</button>
+      <button class="btn btn-outline-secondary" style="border: 1px solid #6c757d; color: #6c757d; background: white;" onclick="openDescModal()">📝 توضیحات سایت</button>
     </div>
 
-    <h3 class="text-center mb-4 fw-bold">مدیریت بخش‌ها و محصولات</h3>
+    <h2 style="text-align: center; margin-bottom: 25px; font-size: 1.4rem;">پنل مدیریت محصولات</h2>
 
     <!-- ۴ دکمه اصلی وسط صفحه -->
-    <div class="row g-3 main-btns">
-      <div class="col-12 col-md-6">
-        <button class="btn btn-primary w-100 btn-category" onclick="openCategoryModal('home', 'محصولات صفحه اصلی', true)">
-          <i class="bi bi-house-door fs-3"></i> محصولات صفحه اصلی
-        </button>
-      </div>
-      <div class="col-12 col-md-6">
-        <button class="btn btn-dark w-100 btn-category" onclick="openCategoryModal('cod', 'محصولات کالاف', false)">
-          <i class="bi bi-controller fs-3"></i> محصولات کالاف
-        </button>
-      </div>
-      <div class="col-12 col-md-6">
-        <button class="btn btn-warning text-dark w-100 btn-category" onclick="openCategoryModal('cp', 'محصولات سی پی', false)">
-          <i class="bi bi-coin fs-3"></i> محصولات سی پی
-        </button>
-      </div>
-      <div class="col-12 col-md-6">
-        <button class="btn btn-info text-white w-100 btn-category" onclick="openCategoryModal('gap_channel', 'محصولات گپ و چنل', false)">
-          <i class="bi bi-chat-dots fs-3"></i> محصولات گپ و چنل
-        </button>
-      </div>
+    <div class="main-grid">
+      <button class="btn btn-primary btn-category" onclick="openCategoryModal('home', 'محصولات صفحه اصلی', true)">
+        🏠 محصولات صفحه اصلی
+      </button>
+      <button class="btn btn-dark btn-category" onclick="openCategoryModal('cod', 'محصولات کالاف', false)">
+        🎮 محصولات کالاف
+      </button>
+      <button class="btn btn-warning btn-category" onclick="openCategoryModal('cp', 'محصولات سی پی', false)">
+        🪙 محصولات سی پی
+      </button>
+      <button class="btn btn-info btn-category" onclick="openCategoryModal('gap_channel', 'محصولات گپ و چنل', false)">
+        💬 محصولات گپ و چنل
+      </button>
     </div>
   </div>
 
   <!-- Modal: تنظیم لینک کانال -->
-  <div class="modal fade" id="channelModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">تنظیم لینک کانال</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  <div class="modal" id="channelModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>تنظیم لینک کانال</h3>
+        <button class="close-btn" onclick="closeModal('channelModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">لینک جدید:</label>
+          <input type="url" id="channelLinkInput" class="form-control" placeholder="https://t.me/...">
         </div>
-        <div class="modal-body">
-          <label class="form-label">لینک جدید کانال:</label>
-          <input type="url" id="channelLinkInput" class="form-control" placeholder="https://t.me/example">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" onclick="saveSettings('channelLink', 'channelLinkInput', 'channelModal')">ثبت</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('channelModal')">انصراف</button>
+        <button class="btn btn-primary" onclick="saveSettings('channelLink', 'channelLinkInput', 'channelModal')">ثبت</button>
       </div>
     </div>
   </div>
 
   <!-- Modal: توضیحات سایت -->
-  <div class="modal fade" id="descModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">توضیحات سایت</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
+  <div class="modal" id="descModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>توضیحات سایت</h3>
+        <button class="close-btn" onclick="closeModal('descModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
           <label class="form-label">متن توضیحات:</label>
-          <textarea id="siteDescInput" class="form-control" rows="4" placeholder="توضیحات سایت را وارد کنید..."></textarea>
+          <textarea id="siteDescInput" class="form-control" rows="4" placeholder="توضیحات..."></textarea>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" onclick="saveSettings('siteDescription', 'siteDescInput', 'descModal')">ثبت</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('descModal')">انصراف</button>
+        <button class="btn btn-primary" onclick="saveSettings('siteDescription', 'siteDescInput', 'descModal')">ثبت</button>
       </div>
     </div>
   </div>
 
-  <!-- Modal: لیست و افزودن محصولات دسته -->
-  <div class="modal fade" id="categoryModal" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header d-flex justify-content-between align-items-center">
-          <h5 class="modal-title" id="categoryModalTitle">مدیریت محصولات</h5>
-          <button class="btn btn-success btn-sm rounded-circle p-2" style="width: 40px; height: 40px;" onclick="toggleAddProductForm(true)" title="افزودن محصول جدید">
-            <i class="bi bi-plus-lg fs-5"></i>
-          </button>
+  <!-- Modal: محصولات دسته -->
+  <div class="modal" id="categoryModal">
+    <div class="modal-content" style="max-width: 700px;">
+      <div class="modal-header">
+        <h3 id="categoryModalTitle">مدیریت محصولات</h3>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button class="btn btn-success" onclick="toggleForm(true)" style="padding: 6px 12px; font-size: 0.85rem;">+ افزودن</button>
+          <button class="close-btn" onclick="closeModal('categoryModal')">&times;</button>
         </div>
-        <div class="modal-body">
-          
-          <!-- فرم اضافه/ویرایش محصول -->
-          <div id="productFormContainer" class="card card-body mb-4 d-none bg-light">
-            <h6 id="formTitle" class="fw-bold mb-3">افزودن محصول جدید</h6>
-            <form id="productForm" onsubmit="handleProductSubmit(event)">
-              <input type="hidden" id="editProductId">
-              
-              <div class="mb-3">
-                <label class="form-label">نام محصول *</label>
-                <input type="text" id="pName" class="form-control" required>
-              </div>
+      </div>
+      <div class="modal-body">
+        
+        <!-- فرم افزودن / ویرایش -->
+        <div id="productFormContainer" style="display: none; background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ddd;">
+          <h4 id="formTitle" style="margin-bottom: 12px; font-size: 1.1rem;">افزودن محصول جدید</h4>
+          <form onsubmit="handleProductSubmit(event)">
+            <input type="hidden" id="editProductId">
+            
+            <div class="form-group">
+              <label class="form-label">نام محصول *</label>
+              <input type="text" id="pName" class="form-control" required>
+            </div>
 
-              <!-- قیمت اصلی و تخفیف برای صفحه اصلی -->
-              <div class="row" id="doublePriceFields">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">قیمت اصلی (تومان) *</label>
-                  <input type="number" id="pPriceMain" class="form-control">
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">قیمت تخفیف خورده (تومان)</label>
-                  <input type="number" id="pPriceDiscount" class="form-control">
-                </div>
+            <div id="doublePriceFields">
+              <div class="form-group">
+                <label class="form-label">قیمت اصلی (تومان) *</label>
+                <input type="number" id="pPriceMain" class="form-control">
               </div>
+              <div class="form-group">
+                <label class="form-label">قیمت تخفیف خورده (تومان)</label>
+                <input type="number" id="pPriceDiscount" class="form-control">
+              </div>
+            </div>
 
-              <!-- قیمت تک برای بقیه دسته‌ها -->
-              <div class="mb-3 d-none" id="singlePriceField">
+            <div id="singlePriceField" style="display: none;">
+              <div class="form-group">
                 <label class="form-label">قیمت (تومان) *</label>
                 <input type="number" id="pPriceSingle" class="form-control">
               </div>
+            </div>
 
-              <div class="mb-3">
-                <label class="form-label">عکس اصلی *</label>
-                <input type="file" id="pMainImg" class="form-control" accept="image/*">
-                <div id="mainImgPreview" class="mt-2"></div>
-              </div>
+            <div class="form-group">
+              <label class="form-label">عکس اصلی *</label>
+              <input type="file" id="pMainImg" class="form-control" accept="image/*">
+            </div>
 
-              <div class="mb-3">
-                <label class="form-label">عکس‌های اضافی (چندتایی)</label>
-                <input type="file" id="pExtraImgs" class="form-control" accept="image/*" multiple>
-                <div id="extraImgsPreview" class="mt-2 d-flex gap-2 flex-wrap"></div>
-              </div>
+            <div class="form-group">
+              <label class="form-label">عکس‌های اضافی</label>
+              <input type="file" id="pExtraImgs" class="form-control" accept="image/*" multiple>
+            </div>
 
-              <div class="mb-3">
-                <label class="form-label">توضیحات اضافی</label>
-                <textarea id="pDesc" class="form-control" rows="3"></textarea>
-              </div>
+            <div class="form-group">
+              <label class="form-label">توضیحات اضافی</label>
+              <textarea id="pDesc" class="form-control" rows="2"></textarea>
+            </div>
 
-              <div class="mb-3">
-                <label class="form-label">تگ محصول</label>
-                <input type="text" id="pTag" class="form-control" placeholder="مثلا: ویژه، جدید، تخفیف‌دار">
-              </div>
+            <div class="form-group">
+              <label class="form-label">تگ محصول</label>
+              <input type="text" id="pTag" class="form-control" placeholder="مثلا: ویژه">
+            </div>
 
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">شماره کارت برای محصول</label>
-                  <input type="text" id="pCardNum" class="form-control" placeholder="603799...">
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">نام دارنده کارت</label>
-                  <input type="text" id="pCardName" class="form-control" placeholder="به نام...">
-                </div>
-              </div>
+            <div class="form-group">
+              <label class="form-label">شماره کارت</label>
+              <input type="text" id="pCardNum" class="form-control">
+            </div>
+            <div class="form-group">
+              <label class="form-label">نام صاحب کارت</label>
+              <input type="text" id="pCardName" class="form-control">
+            </div>
 
-              <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-primary">ذخیره محصول</button>
-                <button type="button" class="btn btn-secondary" onclick="toggleAddProductForm(false)">انصراف</button>
-              </div>
-            </form>
-          </div>
-
-          <!-- لیست محصولات -->
-          <div id="productsList" class="list-group">
-            <!-- محصولات اینجا به‌صورت پویا لود می‌شوند -->
-          </div>
-
+            <div style="display: flex; gap: 10px;">
+              <button type="submit" class="btn btn-primary">ذخیره</button>
+              <button type="button" class="btn btn-secondary" onclick="toggleForm(false)">انصراف</button>
+            </div>
+          </form>
         </div>
+
+        <!-- لیست محصولات -->
+        <div id="productsList"></div>
       </div>
     </div>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
     let currentCategory = '';
     let isHomeCategory = true;
     let productsData = {};
 
-    const categoryModal = new bootstrap.Modal(document.getElementById('categoryModal'));
-    const channelModal = new bootstrap.Modal(document.getElementById('channelModal'));
-    const descModal = new bootstrap.Modal(document.getElementById('descModal'));
-
     function showLoading(show) {
       document.getElementById('loading').style.display = show ? 'flex' : 'none';
     }
 
-    // تبدیل فایل به Base64
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
     const fileToBase64 = file => new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -247,7 +258,6 @@
       reader.onerror = error => reject(error);
     });
 
-    // آپلود عکس از طریق API واسطه Vercel
     async function uploadImage(file) {
       const base64 = await fileToBase64(file);
       const res = await fetch('/api/upload-image', {
@@ -256,38 +266,32 @@
         body: JSON.stringify({ image: base64 })
       });
       const data = await res.json();
-      if (data.success) {
-        return data.data.url;
-      } else {
-        throw new Error('خطا در آپلود عکس');
-      }
+      if (data.success) return data.data.url;
+      throw new Error('خطا در آپلود عکس');
     }
 
-    // باز کردن پاپ‌آپ لینک کانال
     async function openChannelModal() {
       showLoading(true);
       try {
         const res = await fetch('/api/firebase?path=settings/channelLink');
         const data = await res.json();
         if (data) document.getElementById('channelLinkInput').value = data;
-      } catch (e) console.error(e);
+      } catch(e){}
       showLoading(false);
-      channelModal.show();
+      openModal('channelModal');
     }
 
-    // باز کردن پاپ‌آپ توضیحات سایت
     async function openDescModal() {
       showLoading(true);
       try {
         const res = await fetch('/api/firebase?path=settings/siteDescription');
         const data = await res.json();
         if (data) document.getElementById('siteDescInput').value = data;
-      } catch (e) console.error(e);
+      } catch(e){}
       showLoading(false);
-      descModal.show();
+      openModal('descModal');
     }
 
-    // ذخیره تنظیمات ساده
     async function saveSettings(key, inputId, modalId) {
       const val = document.getElementById(inputId).value;
       showLoading(true);
@@ -297,98 +301,83 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(val)
         });
-        bootstrap.Modal.getInstance(document.getElementById(modalId)).hide();
+        closeModal(modalId);
         alert('با موفقیت ثبت شد');
-      } catch (e) {
-        alert('خطا در ثبت اطلاعات');
-      }
+      } catch(e) { alert('خطا در ثبت'); }
       showLoading(false);
     }
 
-    // باز کردن پاپ‌آپ گروه‌ها
     async function openCategoryModal(catKey, title, isHome) {
       currentCategory = catKey;
       isHomeCategory = isHome;
       document.getElementById('categoryModalTitle').innerText = title;
 
-      // تنظیم نمایش فیلدهای قیمت
       if (isHome) {
-        document.getElementById('doublePriceFields').classList.remove('d-none');
-        document.getElementById('singlePriceField').classList.add('d-none');
+        document.getElementById('doublePriceFields').style.display = 'block';
+        document.getElementById('singlePriceField').style.display = 'none';
       } else {
-        document.getElementById('doublePriceFields').classList.add('d-none');
-        document.getElementById('singlePriceField').classList.remove('d-none');
+        document.getElementById('doublePriceFields').style.display = 'none';
+        document.getElementById('singlePriceField').style.display = 'block';
       }
 
-      toggleAddProductForm(false);
+      toggleForm(false);
       await loadProducts();
-      categoryModal.show();
+      openModal('categoryModal');
     }
 
-    function toggleAddProductForm(show, isEdit = false) {
-      const container = document.getElementById('productFormContainer');
-      if (show) {
-        container.classList.remove('d-none');
-        if (!isEdit) {
-          document.getElementById('productForm').reset();
-          document.getElementById('editProductId').value = '';
-          document.getElementById('formTitle').innerText = 'افزودن محصول جدید';
-          document.getElementById('mainImgPreview').innerHTML = '';
-          document.getElementById('extraImgsPreview').innerHTML = '';
-        }
-      } else {
-        container.classList.add('d-none');
+    function toggleForm(show, isEdit = false) {
+      const formContainer = document.getElementById('productFormContainer');
+      formContainer.style.display = show ? 'block' : 'none';
+      if (show && !isEdit) {
+        document.getElementById('productFormContainer').querySelector('form').reset();
+        document.getElementById('editProductId').value = '';
+        document.getElementById('formTitle').innerText = 'افزودن محصول جدید';
       }
     }
 
-    // دریافت لیست محصولات از فایربیس
     async function loadProducts() {
       showLoading(true);
       const listContainer = document.getElementById('productsList');
       listContainer.innerHTML = '';
-      
       try {
         const res = await fetch(`/api/firebase?path=products/${currentCategory}`);
         productsData = await res.json() || {};
 
         if (Object.keys(productsData).length === 0) {
-          listContainer.innerHTML = '<div class="text-center text-muted py-4">محصولی وجود ندارد</div>';
+          listContainer.innerHTML = '<div style="text-align: center; color: #775; padding: 20px;">محصولی ثبت نشده است</div>';
         } else {
           for (const [id, item] of Object.entries(productsData)) {
             const priceText = isHomeCategory 
-              ? `قیمت: ${item.priceMain || 0} ${item.priceDiscount ? `<del class="text-danger">${item.priceDiscount}</del>` : ''} تومان`
+              ? `قیمت: ${item.priceMain || 0} تومان` 
               : `قیمت: ${item.priceSingle || 0} تومان`;
 
-            const html = `
-              <div class="list-group-item d-flex align-items-center justify-content-between p-3">
-                <div class="d-flex align-items-center gap-3">
-                  <img src="${item.mainImg || 'https://via.placeholder.com/60'}" class="product-img-preview" alt="product">
+            listContainer.innerHTML += `
+              <div class="product-card">
+                <div class="product-info">
+                  <img src="${item.mainImg || 'https://via.placeholder.com/50'}" class="product-img">
                   <div>
-                    <h6 class="mb-1 fw-bold">${item.name}</h6>
-                    <small class="text-muted d-block">${priceText}</small>
-                    ${item.tag ? `<span class="badge bg-secondary">${item.tag}</span>` : ''}
+                    <div style="font-weight: bold;">${item.name}</div>
+                    <div style="font-size: 0.85rem; color: #666;">${priceText}</div>
+                    ${item.tag ? `<span class="badge">${item.tag}</span>` : ''}
                   </div>
                 </div>
-                <div class="d-flex gap-2">
-                  <button class="btn btn-outline-warning btn-sm" onclick="editProduct('${id}')"><i class="bi bi-pencil"></i></button>
-                  <button class="btn btn-outline-danger btn-sm" onclick="deleteProduct('${id}')"><i class="bi bi-trash"></i></button>
+                <div class="product-actions">
+                  <button class="btn btn-warning" style="padding: 6px 10px; font-size: 0.8rem;" onclick="editProduct('${id}')">✏️</button>
+                  <button class="btn btn-danger" style="padding: 6px 10px; font-size: 0.8rem;" onclick="deleteProduct('${id}')">🗑️</button>
                 </div>
               </div>
             `;
-            listContainer.insertAdjacentHTML('beforeend', html);
           }
         }
-      } catch (e) {
-        listContainer.innerHTML = '<div class="text-center text-danger py-4">خطا در بارگذاری اطلاعات</div>';
+      } catch(e) {
+        listContainer.innerHTML = '<div style="text-align: center; color: red;">خطا در بارگذاری</div>';
       }
       showLoading(false);
     }
 
-    // افزودن / ویرایش محصول
     async function handleProductSubmit(e) {
       e.preventDefault();
       showLoading(true);
-
       try {
         const editId = document.getElementById('editProductId').value;
         const mainImgFile = document.getElementById('pMainImg').files[0];
@@ -397,19 +386,15 @@
         let mainImgUrl = editId ? productsData[editId]?.mainImg : '';
         let extraImgUrls = editId ? (productsData[editId]?.extraImgs || []) : [];
 
-        // آپلود عکس اصلی در صورت انتخاب عکس جدید
-        if (mainImgFile) {
-          mainImgUrl = await uploadImage(mainImgFile);
-        }
-
-        // آپلود عکس‌های اضافی
+        if (mainImgFile) mainImgUrl = await uploadImage(mainImgFile);
+        
         if (extraImgFiles.length > 0) {
           const uploads = Array.from(extraImgFiles).map(f => uploadImage(f));
           const newUrls = await Promise.all(uploads);
           extraImgUrls = [...extraImgUrls, ...newUrls];
         }
 
-        const productPayload = {
+        const payload = {
           name: document.getElementById('pName').value,
           priceMain: isHomeCategory ? document.getElementById('pPriceMain').value : null,
           priceDiscount: isHomeCategory ? document.getElementById('pPriceDiscount').value : null,
@@ -419,34 +404,29 @@
           desc: document.getElementById('pDesc').value,
           tag: document.getElementById('pTag').value,
           cardNum: document.getElementById('pCardNum').value,
-          cardName: document.getElementById('pCardName').value,
-          updatedAt: new Date().toISOString()
+          cardName: document.getElementById('pCardName').value
         };
 
         const method = editId ? 'PUT' : 'POST';
-        const path = editId 
-          ? `products/${currentCategory}/${editId}` 
-          : `products/${currentCategory}`;
+        const path = editId ? `products/${currentCategory}/${editId}` : `products/${currentCategory}`;
 
         await fetch(`/api/firebase?path=${path}`, {
           method: method,
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(productPayload)
+          body: JSON.stringify(payload)
         });
 
-        toggleAddProductForm(false);
+        toggleForm(false);
         await loadProducts();
-      } catch (err) {
-        alert('خطایی رخ داد: ' + err.message);
+      } catch(err) {
+        alert('خطا: ' + err.message);
       }
       showLoading(false);
     }
 
-    // آماده‌سازی فرم برای ویرایش
     function editProduct(id) {
       const item = productsData[id];
       if (!item) return;
-
       document.getElementById('editProductId').value = id;
       document.getElementById('formTitle').innerText = 'ویرایش محصول';
       document.getElementById('pName').value = item.name || '';
@@ -463,26 +443,16 @@
       document.getElementById('pCardNum').value = item.cardNum || '';
       document.getElementById('pCardName').value = item.cardName || '';
 
-      if (item.mainImg) {
-        document.getElementById('mainImgPreview').innerHTML = `<img src="${item.mainImg}" class="product-img-preview">`;
-      }
-
-      toggleAddProductForm(true, true);
+      toggleForm(true, true);
     }
 
-    // حذف محصول
     async function deleteProduct(id) {
-      if (!confirm('آیا از حذف این محصول اطمینان دارید؟')) return;
+      if (!confirm('حذف شود؟')) return;
       showLoading(true);
-
       try {
-        await fetch(`/api/firebase?path=products/${currentCategory}/${id}`, {
-          method: 'DELETE'
-        });
+        await fetch(`/api/firebase?path=products/${currentCategory}/${id}`, { method: 'DELETE' });
         await loadProducts();
-      } catch (e) {
-        alert('خطا در حذف محصول');
-      }
+      } catch(e) { alert('خطا در حذف'); }
       showLoading(false);
     }
   </script>
