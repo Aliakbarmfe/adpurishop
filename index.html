@@ -95,6 +95,7 @@
     <div class="header-btns">
       <button class="btn btn-outline-primary" style="border: 1px solid #007bff; color: #007bff; background: white;" onclick="openChannelModal()">🔗 تنظیم لینک کانال</button>
       <button class="btn btn-outline-secondary" style="border: 1px solid #6c757d; color: #6c757d; background: white;" onclick="openDescModal()">📝 توضیحات سایت</button>
+      <button class="btn btn-outline-success" style="border: 1px solid #28a745; color: #28a745; background: white;" onclick="openUsersModal()">👥 آمار کاربران</button>
     </div>
 
     <h2 style="text-align: center; margin-bottom: 25px; font-size: 1.4rem;">پنل مدیریت محصولات</h2>
@@ -152,6 +153,23 @@
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeModal('descModal')">انصراف</button>
         <button class="btn btn-primary" onclick="saveSettings('siteDescription', 'siteDescInput', 'descModal')">ثبت</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: آمار کاربران -->
+  <div class="modal" id="usersModal">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3>آمار کاربران</h3>
+        <button class="close-btn" onclick="closeModal('usersModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="usersCount" style="margin-bottom: 15px; font-weight: bold; font-size: 1rem; color: #333;">تعداد کل کاربران: 0</div>
+        <div id="usersList"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('usersModal')">بستن</button>
       </div>
     </div>
   </div>
@@ -273,7 +291,7 @@
     async function openChannelModal() {
       showLoading(true);
       try {
-        const res = await fetch('/api/firebase?path=settings/channelLink');
+        const res = await fetch('/api/rtdb?path=settings/channelLink');
         const data = await res.json();
         if (data) document.getElementById('channelLinkInput').value = data;
       } catch(e){}
@@ -284,7 +302,7 @@
     async function openDescModal() {
       showLoading(true);
       try {
-        const res = await fetch('/api/firebase?path=settings/siteDescription');
+        const res = await fetch('/api/rtdb?path=settings/siteDescription');
         const data = await res.json();
         if (data) document.getElementById('siteDescInput').value = data;
       } catch(e){}
@@ -292,11 +310,69 @@
       openModal('descModal');
     }
 
+    async function openUsersModal() {
+      showLoading(true);
+      const listContainer = document.getElementById('usersList');
+      const countContainer = document.getElementById('usersCount');
+      listContainer.innerHTML = '';
+      countContainer.innerText = 'تعداد کل کاربران: 0';
+
+      try {
+        const res = await fetch('/api/rtdb?path=users');
+        const usersData = await res.json() || {};
+        const usersEntries = Object.entries(usersData);
+
+        countContainer.innerText = `تعداد کل کاربران: ${usersEntries.length}`;
+
+        if (usersEntries.length === 0) {
+          listContainer.innerHTML = '<div style="text-align: center; color: #775; padding: 20px;">کاربری ثبت نشده است</div>';
+        } else {
+          for (const [id, user] of usersEntries) {
+            const username = user.username || id;
+            const password = user.password || 'نامشخص';
+            const dateVal = user.createdAt || user.updatedAt || '';
+            const formattedDate = dateVal ? new Date(dateVal).toLocaleString('fa-IR') : '';
+
+            listContainer.innerHTML += `
+              <div class="product-card" style="flex-direction: column; align-items: stretch; gap: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <div style="font-weight: bold;">نام کاربری: ${username}</div>
+                    ${formattedDate ? `<div style="font-size: 0.8rem; color: #666;">تاریخ: ${formattedDate}</div>` : ''}
+                  </div>
+                  <button class="btn btn-outline-primary" style="padding: 5px 10px; font-size: 0.8rem; border: 1px solid #007bff; color: #007bff; background: white;" onclick="togglePassword(this)">نمایش رمز</button>
+                </div>
+                <div class="password-display" style="display: none; background: #f8f9fa; padding: 8px; border-radius: 4px; font-size: 0.9rem; color: #333;">
+                  رمز عبور: <span style="font-weight: bold; color: #dc3545;">${password}</span>
+                </div>
+              </div>
+            `;
+          }
+        }
+      } catch(e) {
+        listContainer.innerHTML = '<div style="text-align: center; color: red;">خطا در بارگذاری اطلاعات کاربران</div>';
+      }
+      showLoading(false);
+      openModal('usersModal');
+    }
+
+    function togglePassword(btn) {
+      const card = btn.closest('.product-card');
+      const passDiv = card.querySelector('.password-display');
+      if (passDiv.style.display === 'none') {
+        passDiv.style.display = 'block';
+        btn.innerText = 'پنهان کردن رمز';
+      } else {
+        passDiv.style.display = 'none';
+        btn.innerText = 'نمایش رمز';
+      }
+    }
+
     async function saveSettings(key, inputId, modalId) {
       const val = document.getElementById(inputId).value;
       showLoading(true);
       try {
-        await fetch(`/api/firebase?path=settings/${key}`, {
+        await fetch(`/api/rtdb?path=settings/${key}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(val)
@@ -340,7 +416,7 @@
       const listContainer = document.getElementById('productsList');
       listContainer.innerHTML = '';
       try {
-        const res = await fetch(`/api/firebase?path=products/${currentCategory}`);
+        const res = await fetch(`/api/rtdb?path=products/${currentCategory}`);
         productsData = await res.json() || {};
 
         if (Object.keys(productsData).length === 0) {
@@ -410,7 +486,7 @@
         const method = editId ? 'PUT' : 'POST';
         const path = editId ? `products/${currentCategory}/${editId}` : `products/${currentCategory}`;
 
-        await fetch(`/api/firebase?path=${path}`, {
+        await fetch(`/api/rtdb?path=${path}`, {
           method: method,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -450,7 +526,7 @@
       if (!confirm('حذف شود؟')) return;
       showLoading(true);
       try {
-        await fetch(`/api/firebase?path=products/${currentCategory}/${id}`, { method: 'DELETE' });
+        await fetch(`/api/rtdb?path=products/${currentCategory}/${id}`, { method: 'DELETE' });
         await loadProducts();
       } catch(e) { alert('خطا در حذف'); }
       showLoading(false);
@@ -458,3 +534,4 @@
   </script>
 </body>
 </html>
+ 
