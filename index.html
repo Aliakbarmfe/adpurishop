@@ -8,82 +8,157 @@
     @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
     
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; }
-    body { background-color: #f4f6f9; color: #333; padding: 15px; }
+    
+    body { 
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #f8fafc; 
+      padding: 20px; 
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
     .loading-overlay {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(255,255,255,0.8); display: none;
-      justify-content: center; align-items: center; z-index: 9999;
-      font-weight: bold; font-size: 1.2rem; color: #007bff;
+      background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px);
+      display: none; justify-content: center; align-items: center; z-index: 9999;
+      font-weight: bold; font-size: 1.2rem; color: #38bdf8;
+      animation: fadeIn 0.3s ease;
     }
 
-    .container { max-width: 800px; margin: 0 auto; }
+    .container { width: 100%; max-width: 800px; margin: 0 auto; }
 
     /* دکمه‌های بالا */
     .header-btns {
-      display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;
+      display: flex; gap: 12px; margin-bottom: 25px; flex-wrap: wrap; justify-content: center;
     }
     .btn {
-      padding: 10px 18px; border: none; border-radius: 8px; cursor: pointer;
-      font-size: 0.95rem; font-weight: bold; transition: 0.2s;
+      padding: 12px 22px; border: none; border-radius: 12px; cursor: pointer;
+      font-size: 0.95rem; font-weight: bold; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     }
-    .btn-primary { background: #007bff; color: white; }
-    .btn-secondary { background: #6c757d; color: white; }
-    .btn-success { background: #28a745; color: white; }
-    .btn-danger { background: #dc3545; color: white; }
-    .btn-warning { background: #ffc107; color: #212529; }
-    .btn-dark { background: #343a40; color: white; }
-    .btn-info { background: #17a2b8; color: white; }
-    .btn:active { transform: scale(0.97); }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+    .btn:active { transform: scale(0.95); }
+
+    /* استایل‌های مدرن دکمه‌های هدر */
+    .btn-outline-primary { border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; background: rgba(56, 189, 248, 0.08); }
+    .btn-outline-primary:hover { background: #38bdf8; color: #0f172a; }
+
+    .btn-outline-secondary { border: 1px solid rgba(148, 163, 184, 0.4); color: #94a3b8; background: rgba(148, 163, 184, 0.08); }
+    .btn-outline-secondary:hover { background: #94a3b8; color: #0f172a; }
+
+    .btn-outline-success { border: 1px solid rgba(74, 222, 128, 0.4); color: #4ade80; background: rgba(74, 222, 128, 0.08); }
+    .btn-outline-success:hover { background: #4ade80; color: #0f172a; }
+
+    /* دکمه جدید مدیریت با انیمیشن و افکت خاص */
+    .btn-modi {
+      border: 1px solid rgba(244, 63, 94, 0.5);
+      color: #f43f5e;
+      background: rgba(244, 63, 94, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-modi:hover {
+      background: #f43f5e;
+      color: white;
+      border-color: #f43f5e;
+      box-shadow: 0 0 20px rgba(244, 63, 94, 0.4);
+    }
 
     /* دکمه‌های اصلی وسط */
     .main-grid {
-      display: grid; grid-template-columns: 1fr; gap: 15px;
+      display: grid; grid-template-columns: 1fr; gap: 18px;
     }
     @media(min-width: 576px) {
       .main-grid { grid-template-columns: 1fr 1fr; }
     }
     .btn-category {
-      height: 90px; font-size: 1.1rem; border-radius: 12px;
+      height: 100px; font-size: 1.15rem; border-radius: 16px;
       display: flex; align-items: center; justify-content: center;
-      gap: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); width: 100%;
+      gap: 12px; width: 100%; border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
+    .btn-category:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+    .btn-primary { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; }
+    .btn-dark { background: linear-gradient(135deg, #334155, #1e293b); color: white; }
+    .btn-warning { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+    .btn-info { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; }
+    .btn-success { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+    .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+    .btn-secondary { background: linear-gradient(135deg, #64748b, #475569); color: white; }
 
-    /* پاپ‌آپ‌ها (Modal) */
+    /* پاپ‌آپ‌ها (Modal) با انیمیشن ورود */
     .modal {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5); display: none;
-      justify-content: center; align-items: center; z-index: 1000; padding: 15px;
+      background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(5px);
+      display: none; justify-content: center; align-items: center; z-index: 1000; padding: 15px;
+      animation: fadeIn 0.2s ease forwards;
     }
     .modal.active { display: flex; }
     .modal-content {
-      background: white; width: 100%; max-width: 600px;
-      max-height: 90vh; border-radius: 12px; display: flex;
-      flex-direction: column; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      background: #1e293b; color: #f8fafc; width: 100%; max-width: 600px;
+      max-height: 90vh; border-radius: 20px; display: flex;
+      flex-direction: column; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     .modal-header {
-      padding: 15px 20px; background: #f8f9fa; border-bottom: 1px solid #dee2e6;
+      padding: 18px 24px; background: rgba(30, 41, 59, 0.95); border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       display: flex; justify-content: space-between; align-items: center;
     }
-    .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
-    .modal-footer { padding: 15px 20px; background: #f8f9fa; border-top: 1px solid #dee2e6; display: flex; justify-content: flex-end; gap: 10px; }
+    .modal-body { padding: 24px; overflow-y: auto; flex: 1; }
+    .modal-footer { padding: 16px 24px; background: rgba(30, 41, 59, 0.95); border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: flex-end; gap: 10px; }
     
-    .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #aaa; }
+    .close-btn { background: none; border: none; font-size: 1.6rem; cursor: pointer; color: #94a3b8; transition: color 0.2s; }
+    .close-btn:hover { color: #f8fafc; }
 
     /* فرم و لیست محصولات */
-    .form-group { margin-bottom: 15px; }
-    .form-label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9rem; }
-    .form-control { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 6px; font-size: 1rem; }
+    .form-group { margin-bottom: 18px; }
+    .form-label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 0.9rem; color: #cbd5e1; }
+    .form-control { 
+      width: 100%; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.15); 
+      border-radius: 10px; font-size: 1rem; background: #0f172a; color: #f8fafc; 
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    }
     textarea.form-control { resize: vertical; }
 
     .product-card {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 12px; border: 1px solid #e9ecef; border-radius: 8px; margin-bottom: 10px; background: #fff;
+      padding: 14px; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; 
+      margin-bottom: 12px; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px);
+      transition: transform 0.2s, border-color 0.2s;
     }
-    .product-info { display: flex; align-items: center; gap: 12px; }
-    .product-img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; }
+    .product-card:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    .product-info { display: flex; align-items: center; gap: 14px; }
+    .product-img { width: 55px; height: 55px; object-fit: cover; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
     .product-actions { display: flex; gap: 8px; }
-    .badge { background: #6c757d; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; }
+    .badge { background: #334155; color: #cbd5e1; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 500; display: inline-block; margin-top: 4px; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes scaleUp {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
   </style>
 </head>
 <body>
@@ -93,12 +168,14 @@
   <div class="container">
     <!-- دکمه‌های بالا -->
     <div class="header-btns">
-      <button class="btn btn-outline-primary" style="border: 1px solid #007bff; color: #007bff; background: white;" onclick="openChannelModal()">🔗 تنظیم لینک کانال</button>
-      <button class="btn btn-outline-secondary" style="border: 1px solid #6c757d; color: #6c757d; background: white;" onclick="openDescModal()">📝 توضیحات سایت</button>
-      <button class="btn btn-outline-success" style="border: 1px solid #28a745; color: #28a745; background: white;" onclick="openUsersModal()">👥 آمار کاربران</button>
+      <button class="btn btn-outline-primary" onclick="openChannelModal()">🔗 تنظیم لینک کانال</button>
+      <button class="btn btn-outline-secondary" onclick="openDescModal()">📝 توضیحات سایت</button>
+      <button class="btn btn-outline-success" onclick="openUsersModal()">👥 آمار کاربران</button>
+      <!-- دکمه جدید مدیریت -->
+      <button class="btn btn-modi" onclick="window.location.href='https://testshoppuri.vercel.app/modi'">⚙️ مدیریت</button>
     </div>
 
-    <h2 style="text-align: center; margin-bottom: 25px; font-size: 1.4rem;">پنل مدیریت محصولات</h2>
+    <h2 style="text-align: center; margin-bottom: 30px; font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #f8fafc, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">پنل مدیریت محصولات</h2>
 
     <!-- ۴ دکمه اصلی وسط صفحه -->
     <div class="main-grid">
@@ -127,7 +204,7 @@
       <div class="modal-body">
         <div class="form-group">
           <label class="form-label">لینک جدید:</label>
-          <input type="url" id="channelLinkInput" class="form-control" placeholder="https://t.me/...">
+          <input type="url" id="channelLinkInput" class="form-control" placeholder="https://...">
         </div>
       </div>
       <div class="modal-footer">
@@ -165,7 +242,7 @@
         <button class="close-btn" onclick="closeModal('usersModal')">&times;</button>
       </div>
       <div class="modal-body">
-        <div id="usersCount" style="margin-bottom: 15px; font-weight: bold; font-size: 1rem; color: #333;">تعداد کل کاربران: 0</div>
+        <div id="usersCount" style="margin-bottom: 15px; font-weight: bold; font-size: 1rem; color: #38bdf8;">تعداد کل کاربران: 0</div>
         <div id="usersList"></div>
       </div>
       <div class="modal-footer">
@@ -180,15 +257,15 @@
       <div class="modal-header">
         <h3 id="categoryModalTitle">مدیریت محصولات</h3>
         <div style="display: flex; gap: 10px; align-items: center;">
-          <button class="btn btn-success" onclick="toggleForm(true)" style="padding: 6px 12px; font-size: 0.85rem;">+ افزودن</button>
+          <button class="btn btn-success" onclick="toggleForm(true)" style="padding: 8px 14px; font-size: 0.85rem;">+ افزودن</button>
           <button class="close-btn" onclick="closeModal('categoryModal')">&times;</button>
         </div>
       </div>
       <div class="modal-body">
         
         <!-- فرم افزودن / ویرایش -->
-        <div id="productFormContainer" style="display: none; background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ddd;">
-          <h4 id="formTitle" style="margin-bottom: 12px; font-size: 1.1rem;">افزودن محصول جدید</h4>
+        <div id="productFormContainer" style="display: none; background: rgba(15, 23, 42, 0.7); padding: 18px; border-radius: 12px; margin-bottom: 18px; border: 1px solid rgba(255,255,255,0.1);">
+          <h4 id="formTitle" style="margin-bottom: 14px; font-size: 1.1rem; color: #38bdf8;">افزودن محصول جدید</h4>
           <form onsubmit="handleProductSubmit(event)">
             <input type="hidden" id="editProductId">
             
@@ -291,9 +368,13 @@
     async function openChannelModal() {
       showLoading(true);
       try {
-        const res = await fetch('/api/rtdb?path=settings/channelLink');
+        const res = await fetch('/api/set');
         const data = await res.json();
-        if (data) document.getElementById('channelLinkInput').value = data;
+        if (data && data.channelLink) {
+          document.getElementById('channelLinkInput').value = data.channelLink;
+        } else {
+          document.getElementById('channelLinkInput').value = '';
+        }
       } catch(e){}
       showLoading(false);
       openModal('channelModal');
@@ -302,9 +383,13 @@
     async function openDescModal() {
       showLoading(true);
       try {
-        const res = await fetch('/api/rtdb?path=settings/siteDescription');
+        const res = await fetch('/api/set');
         const data = await res.json();
-        if (data) document.getElementById('siteDescInput').value = data;
+        if (data && data.siteDescription) {
+          document.getElementById('siteDescInput').value = data.siteDescription;
+        } else {
+          document.getElementById('siteDescInput').value = '';
+        }
       } catch(e){}
       showLoading(false);
       openModal('descModal');
@@ -325,7 +410,7 @@
         countContainer.innerText = `تعداد کل کاربران: ${usersEntries.length}`;
 
         if (usersEntries.length === 0) {
-          listContainer.innerHTML = '<div style="text-align: center; color: #775; padding: 20px;">کاربری ثبت نشده است</div>';
+          listContainer.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 20px;">کاربری ثبت نشده است</div>';
         } else {
           for (const [id, user] of usersEntries) {
             const username = user.username || id;
@@ -337,20 +422,20 @@
               <div class="product-card" style="flex-direction: column; align-items: stretch; gap: 8px;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                   <div>
-                    <div style="font-weight: bold;">نام کاربری: ${username}</div>
-                    ${formattedDate ? `<div style="font-size: 0.8rem; color: #666;">تاریخ: ${formattedDate}</div>` : ''}
+                    <div style="font-weight: bold; color: #f8fafc;">نام کاربری: ${username}</div>
+                    ${formattedDate ? `<div style="font-size: 0.8rem; color: #94a3b8;">تاریخ: ${formattedDate}</div>` : ''}
                   </div>
-                  <button class="btn btn-outline-primary" style="padding: 5px 10px; font-size: 0.8rem; border: 1px solid #007bff; color: #007bff; background: white;" onclick="togglePassword(this)">نمایش رمز</button>
+                  <button class="btn btn-outline-primary" style="padding: 5px 10px; font-size: 0.8rem;" onclick="togglePassword(this)">نمایش رمز</button>
                 </div>
-                <div class="password-display" style="display: none; background: #f8f9fa; padding: 8px; border-radius: 4px; font-size: 0.9rem; color: #333;">
-                  رمز عبور: <span style="font-weight: bold; color: #dc3545;">${password}</span>
+                <div class="password-display" style="display: none; background: rgba(15, 23, 42, 0.8); padding: 8px; border-radius: 6px; font-size: 0.9rem; color: #f8fafc;">
+                  رمز عبور: <span style="font-weight: bold; color: #f43f5e;">${password}</span>
                 </div>
               </div>
             `;
           }
         }
       } catch(e) {
-        listContainer.innerHTML = '<div style="text-align: center; color: red;">خطا در بارگذاری اطلاعات کاربران</div>';
+        listContainer.innerHTML = '<div style="text-align: center; color: #ef4444;">خطا در بارگذاری اطلاعات کاربران</div>';
       }
       showLoading(false);
       openModal('usersModal');
@@ -372,10 +457,10 @@
       const val = document.getElementById(inputId).value;
       showLoading(true);
       try {
-        await fetch(`/api/rtdb?path=settings/${key}`, {
-          method: 'PUT',
+        await fetch('/api/set', {
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(val)
+          body: JSON.stringify({ key: key, value: val })
         });
         closeModal(modalId);
         alert('با موفقیت ثبت شد');
@@ -420,7 +505,7 @@
         productsData = await res.json() || {};
 
         if (Object.keys(productsData).length === 0) {
-          listContainer.innerHTML = '<div style="text-align: center; color: #775; padding: 20px;">محصولی ثبت نشده است</div>';
+          listContainer.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 20px;">محصولی ثبت نشده است</div>';
         } else {
           for (const [id, item] of Object.entries(productsData)) {
             const priceText = isHomeCategory 
@@ -432,8 +517,8 @@
                 <div class="product-info">
                   <img src="${item.mainImg || 'https://via.placeholder.com/50'}" class="product-img">
                   <div>
-                    <div style="font-weight: bold;">${item.name}</div>
-                    <div style="font-size: 0.85rem; color: #666;">${priceText}</div>
+                    <div style="font-weight: bold; color: #f8fafc;">${item.name}</div>
+                    <div style="font-size: 0.85rem; color: #94a3b8;">${priceText}</div>
                     ${item.tag ? `<span class="badge">${item.tag}</span>` : ''}
                   </div>
                 </div>
@@ -446,7 +531,7 @@
           }
         }
       } catch(e) {
-        listContainer.innerHTML = '<div style="text-align: center; color: red;">خطا در بارگذاری</div>';
+        listContainer.innerHTML = '<div style="text-align: center; color: #ef4444;">خطا در بارگذاری</div>';
       }
       showLoading(false);
     }
@@ -479,7 +564,7 @@
           extraImgs: extraImgUrls,
           desc: document.getElementById('pDesc').value,
           tag: document.getElementById('pTag').value,
-          cardNum: document.getElementById('pCardNum').value,
+          cardNum: document.getElementById('pCardNum.value' || 'pCardNum').value,
           cardName: document.getElementById('pCardName').value
         };
 
@@ -534,4 +619,3 @@
   </script>
 </body>
 </html>
-  
